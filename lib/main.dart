@@ -116,6 +116,13 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(pair.asLowerCase);
+    return Card(
+      // Card is created by applying Refactor with "With Widget" to Padding, then entering Card
+      child: Padding(
+        // used Refactor and Wrapp2Padding to put the text in more space
+        padding: const EdgeInsets.all(40.0),
+        child: Text(pair.asLowerCase),
+      ),
+    );
   }
 }
