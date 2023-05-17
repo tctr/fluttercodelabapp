@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
         ),
         home: MyHomePage(),
       ),
@@ -78,28 +78,33 @@ class MyHomePage extends StatelessWidget {
       // Every build method must return a widget or (more typically) a nested tree
       // of widgets. In this case, the top-level widget is Scaffold.
       // It's a helpful widget and is found in the vast majority of real-world Flutter apps.
-      body: Column(
-        // Column is one of the most basic layout widgets in Flutter. It takes any number of
-        // children and puts them in a column from top to bottom. By default, the column visually
-        // places its children at the top. You'll soon change this so that the column is centered.
-        children: [
-          Text('A random AWESOME idea:'), // ← Example change.
-          BigCard(pair: pair),
-          // Extract Widget : doing this to extract it to a widget with the refactor menu
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // ← Add this.
+          // Column is one of the most basic layout widgets in Flutter. It takes any number of
+          // children and puts them in a column from top to bottom. By default, the column visually
+          // places its children at the top. You'll soon change this so that the column is centered.
+          children: [
+            //Text('A random AWESOME idea:'), // ← Example change.
+            BigCard(pair: pair),
+            // Extract Widget : doing this to extract it to a widget with the refactor menu
 
-          // This second Text widget takes appState, and accesses the only member of that class,
-          // current (which is a WordPair). WordPair provides several helpful getters, such as
-          // asPascalCase or asSnakeCase. Here, we use asLowerCase but you can change this now
-          // if you prefer one of the alternatives.
+            // This second Text widget takes appState, and accesses the only member of that class,
+            // current (which is a WordPair). WordPair provides several helpful getters, such as
+            // asPascalCase or asSnakeCase. Here, we use asLowerCase but you can change this now
+            // if you prefer one of the alternatives.
 
-          ElevatedButton(
-            onPressed: () {
-              appState.getNext();
-              // Call the getNext method from the button's callback
-            },
-            child: Text('Next'),
-          ),
-        ],
+            SizedBox(height: 10),
+
+            ElevatedButton(
+              onPressed: () {
+                appState.getNext();
+                // Call the getNext method from the button's callback
+              },
+              child: Text('Next'),
+            ),
+          ],
+        ),
       ),
     );
   }
