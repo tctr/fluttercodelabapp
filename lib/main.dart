@@ -117,6 +117,14 @@ class BigCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); // add to get color themes
+    final style = theme.textTheme.displayMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+    // theme.textTheme, gives access to the app's font theme.
+    // displayMedium property is a large style meant for display text
+    // Dart, the programming language in which you're writing this app, is null-safe, so it
+    // won't let you call methods of objects that are potentially null. In this case, though,
+    // you can use the ! operator ("bang operator") to assure Dart you know what you're doing
 
     return Card(
       // Card is created by applying Refactor with "With Widget" to Padding, then entering Card
@@ -124,7 +132,7 @@ class BigCard extends StatelessWidget {
       child: Padding(
         // used Refactor and Wrapp2Padding to put the text in more space
         padding: const EdgeInsets.all(40.0),
-        child: Text(pair.asLowerCase),
+        child: Text(pair.asLowerCase, style: style),
       ),
     );
   }
