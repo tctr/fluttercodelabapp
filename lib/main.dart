@@ -71,6 +71,8 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     // MyHomePage tracks changes to the app's current state using the watch method
+    var pair = appState.current;
+    // Extract Widget : doing this to extract it to a widget with the refactor menu
 
     return Scaffold(
       // Every build method must return a widget or (more typically) a nested tree
@@ -82,7 +84,9 @@ class MyHomePage extends StatelessWidget {
         // places its children at the top. You'll soon change this so that the column is centered.
         children: [
           Text('A random AWESOME idea:'), // ← Example change.
-          Text(appState.current.asLowerCase),
+          Text(pair.asLowerCase),
+          // Extract Widget : doing this to extract it to a widget with the refactor menu
+
           // This second Text widget takes appState, and accesses the only member of that class,
           // current (which is a WordPair). WordPair provides several helpful getters, such as
           // asPascalCase or asSnakeCase. Here, we use asLowerCase but you can change this now
@@ -90,8 +94,8 @@ class MyHomePage extends StatelessWidget {
 
           ElevatedButton(
             onPressed: () {
-              appState
-                  .getNext(); // All that remains is to call the getNext method from the button's callback
+              appState.getNext();
+              // Call the getNext method from the button's callback
             },
             child: Text('Next'),
           ),
