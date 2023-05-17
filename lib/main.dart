@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
         ),
         home: MyHomePage(),
       ),
@@ -130,10 +130,13 @@ class BigCard extends StatelessWidget {
       // Card is created by applying Refactor with "With Widget" to Padding, then entering Card
       color: theme.colorScheme.primary,
       child: Padding(
-        // used Refactor and Wrapp2Padding to put the text in more space
-        padding: const EdgeInsets.all(40.0),
-        child: Text(pair.asLowerCase, style: style),
-      ),
+          // used Refactor and Wrapp2Padding to put the text in more space
+          padding: const EdgeInsets.all(40.0),
+          child: Text(
+            pair.asLowerCase,
+            style: style,
+            semanticsLabel: "${pair.first} ${pair.second}",
+          )),
     );
   }
 }
