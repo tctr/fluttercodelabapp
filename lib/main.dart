@@ -84,7 +84,7 @@ class MyHomePage extends StatelessWidget {
         // places its children at the top. You'll soon change this so that the column is centered.
         children: [
           Text('A random AWESOME idea:'), // ← Example change.
-          BigData(pair: pair),
+          BigCard(pair: pair),
           // Extract Widget : doing this to extract it to a widget with the refactor menu
 
           // This second Text widget takes appState, and accesses the only member of that class,
@@ -106,8 +106,8 @@ class MyHomePage extends StatelessWidget {
 }
 
 // Created a new widget by extracting the Text instruction to a widget
-class BigData extends StatelessWidget {
-  const BigData({
+class BigCard extends StatelessWidget {
+  const BigCard({
     super.key,
     required this.pair,
   });
