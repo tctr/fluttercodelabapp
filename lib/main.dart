@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         ),
         home: MyHomePage(),
       ),
@@ -116,8 +116,11 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // add to get color themes
+
     return Card(
       // Card is created by applying Refactor with "With Widget" to Padding, then entering Card
+      color: theme.colorScheme.primary,
       child: Padding(
         // used Refactor and Wrapp2Padding to put the text in more space
         padding: const EdgeInsets.all(40.0),
