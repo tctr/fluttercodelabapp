@@ -60,6 +60,20 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners();
   }
+
+  // add a like button and save the corresponding word pairs
+  var favorites = <WordPair>[];
+  // the property is initialized with an empty list [] and can only contain Wordpair type using generics (template)
+  // a Set could be used instead.They are defined by {}
+
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);
+    } else {
+      favorites.add(current);
+    }
+    notifyListeners();
+  }
 }
 
 // Lastly, there's MyHomePage, the widget you've already modified
@@ -73,6 +87,13 @@ class MyHomePage extends StatelessWidget {
     // MyHomePage tracks changes to the app's current state using the watch method
     var pair = appState.current;
     // Extract Widget : doing this to extract it to a widget with the refactor menu
+
+    IconData icon;
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;
+    } else {
+      icon = Icons.favorite_border;
+    }
 
     return Scaffold(
       // Every build method must return a widget or (more typically) a nested tree
@@ -96,12 +117,28 @@ class MyHomePage extends StatelessWidget {
 
             SizedBox(height: 10),
 
-            ElevatedButton(
-              onPressed: () {
-                appState.getNext();
-                // Call the getNext method from the button's callback
-              },
-              child: Text('Next'),
+            // We have used refactor "wrap with Row" to include a new button next to the "Next" button
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    appState.toggleFavorite();
+                    // Call the getNext method from the button's callback
+                  },
+                  icon: Icon(icon),
+                  label: Text('Like'),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    appState.getNext();
+                    // Call the getNext method from the button's callback
+                  },
+                  child: Text('Next'),
+                ),
+              ],
             ),
           ],
         ),
