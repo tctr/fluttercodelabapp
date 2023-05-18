@@ -65,52 +65,55 @@ class _MyHomePageState extends State<MyHomePage> {
         throw UnimplementedError('no widget for $selectedIndex');
     }
 
-    return Scaffold(
-      // The new MyHomePage contains a Row with two children. The first widget is SafeArea, and the second
-      // is an Expanded widget.
-      body: Row(
-        children: [
-          // The SafeArea ensures that its child is not obscured by a hardware notch or a status bar.
-          // In this app, the widget wraps around NavigationRail
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: NavigationRail(
-                extended: false,
-                destinations: [
-                  NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text('Home'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
-                    label: Text('Favorites'),
-                  ),
-                ],
-                // A selected index of zero selects the first destination, a selected index of one selects the
-                //second destination, and so on
-                selectedIndex: selectedIndex,
-                onDestinationSelected: (value) {
-                  //print('selected: $value');
-                  setState(() {
-                    selectedIndex = value;
-                  });
-                },
+    // using LayoutBuilder (replacing Scaffold) to be able to have a resposive app
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        // The new MyHomePage contains a Row with two children. The first widget is SafeArea, and the second
+        // is an Expanded widget.
+        body: Row(
+          children: [
+            // The SafeArea ensures that its child is not obscured by a hardware notch or a status bar.
+            // In this app, the widget wraps around NavigationRail
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: NavigationRail(
+                  extended: constraints.maxWidth >= 600,
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Home'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite),
+                      label: Text('Favorites'),
+                    ),
+                  ],
+                  // A selected index of zero selects the first destination, a selected index of one selects the
+                  //second destination, and so on
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (value) {
+                    //print('selected: $value');
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  },
+                ),
               ),
             ),
-          ),
-          // Expanded widgets are extremely useful in rows and columns—they let you express layouts where some
-          // children take only as much space as they need (NavigationRail, in this case) and other widgets should
-          // take as much of the remaining room as possible (Expanded, in this case).
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
+            // Expanded widgets are extremely useful in rows and columns—they let you express layouts where some
+            // children take only as much space as they need (NavigationRail, in this case) and other widgets should
+            // take as much of the remaining room as possible (Expanded, in this case).
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: page,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }
 
