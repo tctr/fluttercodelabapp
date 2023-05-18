@@ -28,9 +28,137 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
         ),
         home: MyHomePage(),
+      ),
+    );
+  }
+}
+
+// the entire contents of MyHomePage is extracted into a new widget, GeneratorPage. The only part of the old
+// MyHomePage widget that didn't get extracted is Scaffold.
+
+// then MyHomePage is modified extending a StatefulWidget instead of a StatelessWidget
+// A StatefulWidget is a type of widget that has State
+// Using StatefulWidget, we can avoid having all our variables stored in MyAppState
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+  // The underscore (_) at the start of _MyHomePageState makes that class private
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  var selectedIndex = 0; // initialized to 0
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // The new MyHomePage contains a Row with two children. The first widget is SafeArea, and the second
+      // is an Expanded widget.
+      body: Row(
+        children: [
+          // The SafeArea ensures that its child is not obscured by a hardware notch or a status bar.
+          // In this app, the widget wraps around NavigationRail
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: NavigationRail(
+                extended: false,
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home),
+                    label: Text('Home'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.favorite),
+                    label: Text('Favorites'),
+                  ),
+                ],
+                // A selected index of zero selects the first destination, a selected index of one selects the
+                //second destination, and so on
+                selectedIndex: selectedIndex,
+                onDestinationSelected: (value) {
+                  //print('selected: $value');
+                  setState(() {
+                    selectedIndex = value;
+                  });
+                },
+              ),
+            ),
+          ),
+          // Expanded widgets are extremely useful in rows and columns—they let you express layouts where some
+          // children take only as much space as they need (NavigationRail, in this case) and other widgets should
+          // take as much of the remaining room as possible (Expanded, in this case).
+          Expanded(
+            child: Container(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: GeneratorPage(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GeneratorPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    // MyHomePage tracks changes to the app's current state using the watch method
+    var pair = appState.current;
+    // Extract Widget : doing this to extract it to a widget with the refactor menu
+
+    IconData icon;
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;
+    } else {
+      icon = Icons.favorite_border;
+    }
+
+    return Center(
+      // Every build method must return a widget or (more typically) a nested tree
+      // of widgets. In this case, the top-level widget is Scaffold.
+      // It's a helpful widget and is found in the vast majority of real-world Flutter apps.
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        // Column is one of the most basic layout widgets in Flutter. It takes any number of
+        // children and puts them in a column from top to bottom. By default, the column visually
+        // places its children at the top. You'll soon change this so that the column is centered.
+        children: [
+          //Text('A random AWESOME idea:'), // ← Example change.
+          BigCard(pair: pair),
+          // Extract Widget : doing this to extract it to a widget with the refactor menu
+
+          // This second Text widget takes appState, and accesses the only member of that class,
+          // current (which is a WordPair). WordPair provides several helpful getters, such as
+          // asPascalCase or asSnakeCase. Here, we use asLowerCase but you can change this now
+          // if you prefer one of the alternatives.
+
+          SizedBox(height: 10),
+
+          // We have used refactor "wrap with Row" to include a new button next to the "Next" button
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  appState.toggleFavorite();
+                },
+                icon: Icon(icon),
+                label: Text('Like'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -73,77 +201,6 @@ class MyAppState extends ChangeNotifier {
       favorites.add(current);
     }
     notifyListeners();
-  }
-}
-
-// Lastly, there's MyHomePage, the widget you've already modified
-
-class MyHomePage extends StatelessWidget {
-  @override
-  // Every widget defines a build() method that's automatically called every time the widget's
-  // circumstances change so that the widget is always up to date.
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    // MyHomePage tracks changes to the app's current state using the watch method
-    var pair = appState.current;
-    // Extract Widget : doing this to extract it to a widget with the refactor menu
-
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
-
-    return Scaffold(
-      // Every build method must return a widget or (more typically) a nested tree
-      // of widgets. In this case, the top-level widget is Scaffold.
-      // It's a helpful widget and is found in the vast majority of real-world Flutter apps.
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // ← Add this.
-          // Column is one of the most basic layout widgets in Flutter. It takes any number of
-          // children and puts them in a column from top to bottom. By default, the column visually
-          // places its children at the top. You'll soon change this so that the column is centered.
-          children: [
-            //Text('A random AWESOME idea:'), // ← Example change.
-            BigCard(pair: pair),
-            // Extract Widget : doing this to extract it to a widget with the refactor menu
-
-            // This second Text widget takes appState, and accesses the only member of that class,
-            // current (which is a WordPair). WordPair provides several helpful getters, such as
-            // asPascalCase or asSnakeCase. Here, we use asLowerCase but you can change this now
-            // if you prefer one of the alternatives.
-
-            SizedBox(height: 10),
-
-            // We have used refactor "wrap with Row" to include a new button next to the "Next" button
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorite();
-                    // Call the getNext method from the button's callback
-                  },
-                  icon: Icon(icon),
-                  label: Text('Like'),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    appState.getNext();
-                    // Call the getNext method from the button's callback
-                  },
-                  child: Text('Next'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
